@@ -14,7 +14,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","items"})
 public class Category {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
@@ -25,8 +28,8 @@ private String name;
 	public Category() {
 		
 	}
-	@OneToMany(cascade = {CascadeType.DETACH,CascadeType.MERGE,CascadeType.PERSIST,CascadeType.REFRESH},
-            mappedBy="category")
+	@OneToMany(cascade = {CascadeType.ALL},
+            mappedBy="category" ,fetch=FetchType.LAZY)
 	private List<Item> items;
 	public int getCategory_id() {
 		return id;

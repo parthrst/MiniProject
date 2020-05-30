@@ -9,15 +9,18 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler","category"})
 public class Item {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private int item_id;
 	@NotNull(message="Item Name can not be empty")
-	private String item_name;
-	private int item_quantity;
-	private int item_price;
+	private String itemName;
+	private int itemQantity;
+	private int itemPrice;
 	@ManyToOne(cascade= {CascadeType.PERSIST,CascadeType.MERGE,CascadeType.DETACH,CascadeType.REFRESH})
 	@JoinColumn(name="category_id", nullable=false)
 	private Category category;
@@ -29,10 +32,10 @@ public class Item {
 	}
 	
 	public String getItem_name() {
-		return item_name;
+		return itemName;
 	}
 	public void setItem_name(String item_name) {
-		this.item_name = item_name;
+		this.itemName = item_name;
 	}
 //	public int getCategory_id() {
 //		return category_id;
@@ -41,26 +44,26 @@ public class Item {
 //		this.category_id = category_id;
 	//}
 	public int getItem_quantity() {
-		return item_quantity;
+		return itemQantity;
 	}
 	public Item() {
 		
 	}
 	public void setItem_quantity(int item_quantity) {
-		this.item_quantity = item_quantity;
+		this.itemQantity = item_quantity;
 	}
 	public int getItem_price() {
-		return item_price;
+		return itemPrice;
 	}
 	public Item(@NotNull(message = "Item Name can not be empty") String item_name, int item_quantity, int item_price,Category cat) {
 		super();
-		this.item_name = item_name;
-		this.item_quantity = item_quantity;
-		this.item_price = item_price;
+		this.itemName = item_name;
+		this.itemQantity = item_quantity;
+		this.itemPrice = item_price;
 		this.category=cat;
 	}
 	public void setItem_price(int item_price) {
-		this.item_price = item_price;
+		this.itemPrice = item_price;
 	}
 
 }

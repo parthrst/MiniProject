@@ -8,6 +8,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,7 +96,7 @@ public @ResponseBody String addCategory(@RequestParam String name)
 	
 }
 @GetMapping(path="/showcategory")
-public Iterable<Category> showCtaegory() {
+public @ResponseBody List<Category> showCtaegory() {
 	return category.findAll();
 	
 }
@@ -137,8 +138,48 @@ public @ResponseBody String addItem(@RequestParam String categoryName ,@RequestP
 	}
 	
 }
-@GetMapping(path="showList")
-public Iterable<Item> getList(){
+@GetMapping(path="showItemList")
+public @ResponseBody Iterable<Item> getItemList(){
 	return item.findAll();
+}
+
+@PostMapping(path="/deleteItem")
+public @ResponseBody String deleteItem(String items)
+{
+	Item temp=item.findByItemName(items);
+	if(temp!=null)
+	{   item.delete(temp);
+		return "Item Deleted";
+	}
+	else
+		return "Item Not Found";
+}
+@PostMapping(path="/deleteCategory")
+public @ResponseBody String deleteCategory(String cat) {
+	Category temp=category.findByName(cat);
+	if(temp==null)
+		return "Category not in list";
+	else
+	{
+		category.delete(temp);
+		return "Category deleted";
+	}
+}
+
+@PostMapping(path="/{itemName}/updateItem")
+public @ResponseBody String updateItem(@PathVariable String itemName,@Valid @RequestBody ItemUpdate update){
+	Item temp=item.findByItemName(itemName);
+	if(temp==null)
+	{ 
+	return "Item not found in database";
+	}
+	else
+	{
+		temp.setItem_name(update.getName());
+		temp.setItem_price(update.getPrice());
+		temp.setItem_quantity(update.getQuantitiy());
+	item.save(temp);
+	return "Item Updated";
+	}
 }
 }
